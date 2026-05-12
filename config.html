@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>信息配置 - 年报客户分享纪要</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="logo.png" alt="Logo" class="nav-logo">
+            年报客户分享纪要
+        </div>
+        <div class="nav-links">
+            <a href="index.html">录入纪要</a>
+            <a href="admin.html" id="navAdmin">纪要管理</a>
+            <a href="config.html" class="active" id="navConfig">信息配置</a>
+            <span class="nav-user" id="navUserLabel" style="display:none;"></span>
+            <a href="#" id="navLogin" onclick="showLoginModal()">登录</a>
+            <a href="#" id="navLogout" onclick="logout()" style="display:none;">退出登录</a>
+        </div>
+    </nav>
+
+    <!-- 登录模态框 -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content login-content">
+            <h2>用户登录</h2>
+            <p class="login-hint">请输入用户名和密码</p>
+            <input type="text" id="loginUsername" placeholder="用户名" onkeypress="if(event.key==='Enter')document.getElementById('loginPassword').focus()">
+            <input type="password" id="loginPassword" placeholder="密码" onkeypress="if(event.key==='Enter')doLogin()">
+            <div class="login-error" id="loginError"></div>
+            <button class="btn-submit" onclick="doLogin()">登录</button>
+            <button class="btn-reset" onclick="closeLoginModal()">取消</button>
+            <p class="login-register-hint">还没有账号？<a href="#" onclick="showRegisterModal()">立即注册</a></p>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content login-content">
+            <h2>用户注册</h2>
+            <p class="login-hint">创建新账号</p>
+            <input type="text" id="regUsername" placeholder="用户名" onkeypress="if(event.key==='Enter')document.getElementById('regPassword').focus()">
+            <input type="password" id="regPassword" placeholder="密码" onkeypress="if(event.key==='Enter')document.getElementById('regConfirm').focus()">
+            <input type="password" id="regConfirm" placeholder="确认密码" onkeypress="if(event.key==='Enter')doRegister()">
+            <div class="login-error" id="registerError"></div>
+            <button class="btn-submit" onclick="doRegister()">注册</button>
+            <button class="btn-reset" onclick="closeRegisterModal()">取消</button>
+            <p class="login-register-hint">已有账号？<a href="#" onclick="showLoginModal()">立即登录</a></p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="form-section config-section">
+            <h1>信息配置</h1>
+            <p class="subtitle">配置表单中各下拉框的可选字段</p>
+
+            <h3 class="section-title">公司名称配置</h3>
+            <div class="config-block">
+                <p class="config-hint">每行输入一个公司名称，用于"公司名称"下拉框</p>
+                <textarea id="companyConfig" rows="6" placeholder="太平&#10;太保集团&#10;友邦人寿"></textarea>
+            </div>
+
+            <h3 class="section-title">分享材料配置</h3>
+            <div class="config-block">
+                <p class="config-hint">每行输入一个材料名称，用于"分享材料"下拉框</p>
+                <textarea id="materialConfig" rows="6" placeholder="IFRS17切换分析&#10;行业对标报告&#10;敏感性分析"></textarea>
+            </div>
+
+            <h3 class="section-title">提问方配置（可选）</h3>
+            <div class="config-block">
+                <p class="config-hint">每行输入一个选项，用于录入页面的提问方标签</p>
+                <textarea id="speakerConfig" rows="4" placeholder="KP提问&#10;客户提问&#10;KP描述&#10;客户描述&#10;KP待跟进"></textarea>
+            </div>
+
+            <h3 class="section-title">跟进状态配置</h3>
+            <div class="config-block">
+                <p class="config-hint">每行输入一个状态，用于"跟进状态"下拉框</p>
+                <textarea id="statusConfig" rows="4" placeholder="进行中&#10;已完成"></textarea>
+            </div>
+
+            <h3 class="section-title">录入默认值配置</h3>
+            <div class="config-block defaults-block">
+                <p class="config-hint">配置录入页面的默认值，减少重复输入</p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>分享日期默认偏移（天）</label>
+                        <input type="number" id="shareDateOffsetConfig" value="0" min="-30" max="30" placeholder="0=今天，-1=昨天">
+                        <span class="input-hint">0 = 今天，-1 = 昨天，1 = 明天</span>
+                    </div>
+                    <div class="form-group">
+                        <label>KP负责人默认值</label>
+                        <input type="text" id="kpLeaderDefaultConfig" placeholder="如：张三">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>跟进状态默认值</label>
+                        <select id="followUpStatusDefaultConfig">
+                            <option value="进行中">进行中</option>
+                            <option value="已完成">已完成</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn-submit" onclick="saveConfig()">保存配置</button>
+                <button class="btn-reset" onclick="resetConfig()">恢复默认</button>
+            </div>
+        </div>
+
+        <!-- 用户管理区域 -->
+        <div class="form-section user-management-section" id="userManagementSection">
+            <h1>用户管理</h1>
+            <p class="subtitle">管理系统用户、分配角色和权限</p>
+
+            <div class="user-stats-bar">
+                <span>共 <strong id="userTotalCount">0</strong> 位用户</span>
+                <span class="user-stat-divider">|</span>
+                <span>管理员 <strong id="userAdminCount">0</strong> 人</span>
+                <span class="user-stat-divider">|</span>
+                <span>普通用户 <strong id="userNormalCount">0</strong> 人</span>
+            </div>
+
+            <div class="user-list">
+                <div class="table-header user-table-header">
+                    <div class="th">用户名</div>
+                    <div class="th">角色</div>
+                    <div class="th">创建时间</div>
+                    <div class="th">操作</div>
+                </div>
+                <div id="userListRows"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="configModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">✓</div>
+            <h2>保存成功</h2>
+            <p>配置已更新，新配置将在下次加载页面时生效。</p>
+            <button class="btn-close" onclick="closeConfigModal()">确定</button>
+        </div>
+    </div>
+
+    <!-- 重置密码弹窗 -->
+    <div id="resetPasswordModal" class="modal">
+        <div class="modal-content login-content">
+            <span class="close-btn" onclick="closeResetPasswordModal()">&times;</span>
+            <h2>重置密码</h2>
+            <p class="login-hint">为用户 <strong id="resetPwdUsername"></strong> 设置新密码</p>
+            <input type="password" id="newPassword" placeholder="新密码（至少4位）">
+            <input type="password" id="confirmPassword" placeholder="确认新密码" onkeypress="if(event.key==='Enter')doResetPassword()">
+            <div class="login-error" id="resetPwdError"></div>
+            <button class="btn-submit" onclick="doResetPassword()">确认重置</button>
+            <button class="btn-reset" onclick="closeResetPasswordModal()">取消</button>
+        </div>
+    </div>
+
+    <!-- 编辑角色弹窗 -->
+    <div id="editRoleModal" class="modal">
+        <div class="modal-content login-content">
+            <span class="close-btn" onclick="closeEditRoleModal()">&times;</span>
+            <h2>修改角色</h2>
+            <p class="login-hint">修改用户 <strong id="editRoleUsername"></strong> 的角色</p>
+            <div style="text-align:left;margin-bottom:20px;">
+                <label style="display:block;font-size:14px;font-weight:600;color:#555;margin-bottom:8px;">选择角色</label>
+                <select id="newRoleSelect" style="width:100%;padding:14px 16px;border:2px solid #e8e8e8;border-radius:12px;font-size:15px;font-family:inherit;background:#fafafa;">
+                    <option value="user">普通用户</option>
+                    <option value="admin">管理员</option>
+                </select>
+            </div>
+            <button class="btn-submit" onclick="doChangeRole()">确认修改</button>
+            <button class="btn-reset" onclick="closeEditRoleModal()">取消</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+    <script src="supabase-client.js"></script>
+    <script src="api.js"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // 等待 auth.js 初始化完成（session 恢复）
+            if (typeof authReady !== 'undefined') await authReady;
+            // 检查管理员权限
+            if (typeof protectAdminPage === 'function') {
+                const ok = await protectAdminPage();
+                if (!ok) return;
+            }
+            // 加载配置到表单
+            if (typeof loadConfigToPage === 'function') {
+                await loadConfigToPage();
+            }
+            // 渲染用户列表
+            await renderUserList();
+        });
+
+        // ==================== 用户管理逻辑 ====================
+
+        async function renderUserList() {
+            if (typeof getUserList !== 'function') return;
+            const users = await getUserList();
+            const stats = typeof getUserStats === 'function' ? await getUserStats() : { total: users.length, admin: 0, user: 0 };
+            const currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : '';
+
+            // 更新统计
+            const totalEl = document.getElementById('userTotalCount');
+            const adminEl = document.getElementById('userAdminCount');
+            const normalEl = document.getElementById('userNormalCount');
+            if (totalEl) totalEl.textContent = stats.total;
+            if (adminEl) adminEl.textContent = stats.admin;
+            if (normalEl) normalEl.textContent = stats.user;
+
+            // 渲染用户列表
+            const container = document.getElementById('userListRows');
+            if (!container) return;
+
+            container.innerHTML = users.map(u => {
+                const isSelf = u.username === currentUser;
+                const roleLabel = u.role === 'admin'
+                    ? '<span class="role-badge role-admin">管理员</span>'
+                    : '<span class="role-badge role-user">普通用户</span>';
+                const created = u.createdAt ? new Date(u.createdAt).toLocaleDateString('zh-CN') : '-';
+
+                return `
+                    <div class="user-row">
+                        <div class="td">
+                            <span class="user-name">${escapeUserHtml(u.username)}</span>
+                            ${isSelf ? '<span class="self-tag">当前用户</span>' : ''}
+                        </div>
+                        <div class="td">${roleLabel}</div>
+                        <div class="td user-created">${created}</div>
+                        <div class="td user-actions">
+                            ${!isSelf ? `
+                                <button class="btn-view" onclick="showEditRoleModal('${escapeUserHtml(u.username)}', '${u.role}')">改角色</button>
+                                <button class="btn-status" onclick="showResetPasswordModal('${escapeUserHtml(u.username)}')">重置密码</button>
+                                <button class="btn-status btn-delete-user" onclick="doDeleteUser('${escapeUserHtml(u.username)}')">删除</button>
+                            ` : '<span style="color:#999;font-size:13px;">-</span>'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function escapeUserHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 重置密码
+        window.showResetPasswordModal = function(username) {
+            document.getElementById('resetPwdUsername').textContent = username;
+            document.getElementById('resetPwdUsername').setAttribute('data-username', username);
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+            document.getElementById('resetPwdError').textContent = '';
+            document.getElementById('resetPasswordModal').classList.add('show');
+        };
+
+        window.closeResetPasswordModal = function() {
+            document.getElementById('resetPasswordModal').classList.remove('show');
+        };
+
+        window.doResetPassword = function() {
+            const usernameEl = document.getElementById('resetPwdUsername');
+            const username = usernameEl.getAttribute('data-username');
+            const newPwd = document.getElementById('newPassword').value;
+            const confirmPwd = document.getElementById('confirmPassword').value;
+            const errorDiv = document.getElementById('resetPwdError');
+
+            if (!newPwd) {
+                errorDiv.textContent = '请输入新密码';
+                return;
+            }
+            if (newPwd.length < 4) {
+                errorDiv.textContent = '密码长度至少4位';
+                return;
+            }
+            if (newPwd !== confirmPwd) {
+                errorDiv.textContent = '两次输入的密码不一致';
+                return;
+            }
+
+            const result = typeof resetUserPassword === 'function'
+                ? resetUserPassword(username, newPwd)
+                : { success: false, message: '功能不可用' };
+
+            if (result.success) {
+                closeResetPasswordModal();
+                alert('密码已重置');
+            } else {
+                errorDiv.textContent = result.message;
+            }
+        };
+
+        // 修改角色
+        window.showEditRoleModal = function(username, currentRole) {
+            document.getElementById('editRoleUsername').textContent = username;
+            document.getElementById('editRoleUsername').setAttribute('data-username', username);
+            document.getElementById('newRoleSelect').value = currentRole;
+            document.getElementById('editRoleModal').classList.add('show');
+        };
+
+        window.closeEditRoleModal = function() {
+            document.getElementById('editRoleModal').classList.remove('show');
+        };
+
+        window.doChangeRole = async function() {
+            const usernameEl = document.getElementById('editRoleUsername');
+            const username = usernameEl.getAttribute('data-username');
+            const newRole = document.getElementById('newRoleSelect').value;
+
+            const result = typeof changeUserRole === 'function'
+                ? await changeUserRole(username, newRole)
+                : { success: false, message: '功能不可用' };
+
+            if (result.success) {
+                closeEditRoleModal();
+                renderUserList();
+            } else {
+                alert(result.message);
+            }
+        };
+
+        // 删除用户
+        window.doDeleteUser = async function(username) {
+            if (!confirm('确定要删除用户 "' + username + '" 吗？该用户的所有数据将无法恢复。')) return;
+
+            const result = typeof deleteUser === 'function'
+                ? await deleteUser(username)
+                : { success: false, message: '功能不可用' };
+
+            if (result.success) {
+                renderUserList();
+            } else {
+                alert(result.message);
+            }
+        };
+
+        // 点击外部关闭弹窗
+        ['resetPasswordModal', 'editRoleModal'].forEach(id => {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.classList.remove('show');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

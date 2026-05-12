@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>年报客户分享纪要录入</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="logo.png" alt="Logo" class="nav-logo">
+            年报客户分享纪要
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="active">录入纪要</a>
+            <a href="admin.html" id="navAdmin" style="display:none;">纪要管理</a>
+            <a href="config.html" id="navConfig" style="display:none;">信息配置</a>
+            <span class="nav-user" id="navUserLabel" style="display:none;"></span>
+            <a href="#" id="navLogin" onclick="showLoginModal()">登录</a>
+            <a href="#" id="navLogout" onclick="logout()" style="display:none;">退出登录</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-section">
+            <h1>年报客户分享纪要录入</h1>
+            <p class="subtitle">记录与客户的分享内容及待跟进事项</p>
+            <div id="loginHint" class="login-hint-bar" style="display:none;">
+                <span>您当前以访客身份录入，数据将标记为匿名。建议 <a href="#" onclick="showLoginModal();return false;">登录</a> 或 <a href="#" onclick="showRegisterModal();return false;">注册</a> 以管理您的纪要。</span>
+            </div>
+
+            <form id="recordForm">
+                <h3 class="section-title">基本信息</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="company">公司名称 <span class="required">*</span></label>
+                        <div id="companySelectWrapper" data-name="company"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="shareDate">分享日期 <span class="required">*</span></label>
+                        <input type="text" id="shareDate" name="shareDate" required placeholder="YYYY/MM/DD" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="shareMaterial">分享材料 <span class="required">*</span></label>
+                        <div id="materialSelectWrapper" data-name="shareMaterial"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="shareTarget">分享对象 <span class="required">*</span></label>
+                        <input type="text" id="shareTarget" name="shareTarget" required placeholder="如：xx人寿CFO、总精，及精算部员工">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="kpLeader">KP 负责人</label>
+                        <input type="text" id="kpLeader" name="kpLeader" placeholder="请输入 KPMG 负责人姓名">
+                    </div>
+                </div>
+
+                <h3 class="section-title">客户问答</h3>
+                <div id="qaContainer">
+                    <div class="qa-block" data-index="0">
+                        <div class="qa-header">
+                            <span class="qa-number">问答 1</span>
+                            <button type="button" class="btn-remove-qa" onclick="removeQaBlock(this)" style="display:none;">删除</button>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>材料页码</label>
+                                <input type="text" name="qaPage[]" placeholder="如：P5">
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>KP 问题</label>
+                            <textarea name="kpQuestion[]" rows="2" placeholder="请输入 KP 提出的问题..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>客户回复</label>
+                            <textarea name="clientReply[]" rows="2" placeholder="请输入客户的回复..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>客户问题</label>
+                            <textarea name="clientQuestion[]" rows="2" placeholder="请输入客户提出的问题..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>KP 回复</label>
+                            <textarea name="kpReply[]" rows="2" placeholder="请输入 KP 的回复..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn-add-qa" onclick="addQaBlock()">+ 添加问答</button>
+
+                <h3 class="section-title">KP 待跟进事项</h3>
+                <div id="followUpContainer">
+                    <div class="followup-block" data-index="0">
+                        <div class="followup-header">
+                            <span class="followup-number">待跟进 1</span>
+                            <button type="button" class="btn-remove-followup" onclick="removeFollowUpBlock(this)" style="display:none;">删除</button>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>材料页码</label>
+                                <input type="text" name="followUpPage[]" placeholder="如：P5">
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>待跟进事项</label>
+                            <textarea name="followUpContent[]" rows="2" placeholder="请输入待跟进事项..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>跟进状态</label>
+                                <select name="followUpStatus[]" class="status-select">
+                                    <option value="进行中">进行中</option>
+                                    <option value="已完成">已完成</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn-add-qa" onclick="addFollowUpBlock()">+ 添加待跟进</button>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">保存纪要</button>
+                    <button type="reset" class="btn-reset">重置表单</button>
+                </div>
+            </form>
+
+            <div class="excel-section">
+                <h3 class="section-title">Excel 批量录入</h3>
+                <div class="excel-actions">
+                    <a href="#" class="btn-excel-download" onclick="downloadTemplate()">下载 Excel 模板</a>
+                    <div class="excel-upload">
+                        <input type="file" id="excelFile" accept=".xlsx,.xls" style="display:none;" onchange="handleExcelUpload(this)">
+                        <button class="btn-excel-upload" onclick="document.getElementById('excelFile').click()">上传 Excel 批量录入</button>
+                    </div>
+                </div>
+                <p class="excel-hint">请先下载模板，按模板格式填入数据后上传</p>
+            </div>
+        </div>
+
+        <div id="successModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-icon">✓</div>
+                <h2>保存成功！</h2>
+                <p>客户分享纪要已成功保存。</p>
+                <button class="btn-close" onclick="closeModal()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 登录模态框 -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content login-content">
+            <h2>用户登录</h2>
+            <p class="login-hint">请输入用户名和密码</p>
+            <input type="text" id="loginUsername" placeholder="用户名" onkeypress="if(event.key==='Enter')document.getElementById('loginPassword').focus()">
+            <input type="password" id="loginPassword" placeholder="密码" onkeypress="if(event.key==='Enter')doLogin()">
+            <div class="login-error" id="loginError"></div>
+            <button class="btn-submit" onclick="doLogin()">登录</button>
+            <button class="btn-reset" onclick="closeLoginModal()">取消</button>
+            <p class="login-register-hint">还没有账号？<a href="#" onclick="showRegisterModal()">立即注册</a></p>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content login-content">
+            <h2>用户注册</h2>
+            <p class="login-hint">创建新账号</p>
+            <input type="text" id="regUsername" placeholder="用户名" onkeypress="if(event.key==='Enter')document.getElementById('regPassword').focus()">
+            <input type="password" id="regPassword" placeholder="密码" onkeypress="if(event.key==='Enter')document.getElementById('regConfirm').focus()">
+            <input type="password" id="regConfirm" placeholder="确认密码" onkeypress="if(event.key==='Enter')doRegister()">
+            <div class="login-error" id="registerError"></div>
+            <button class="btn-submit" onclick="doRegister()">注册</button>
+            <button class="btn-reset" onclick="closeRegisterModal()">取消</button>
+            <p class="login-register-hint">已有账号？<a href="#" onclick="showLoginModal()">立即登录</a></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+    <script src="supabase-client.js"></script>
+    <script src="api.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="config.js"></script>
+    <script src="searchable-select.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

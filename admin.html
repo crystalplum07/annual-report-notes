@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>纪要管理后台 - 年报客户分享纪要</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="logo.png" alt="Logo" class="nav-logo">
+            年报客户分享纪要
+        </div>
+        <div class="nav-links">
+            <a href="index.html">录入纪要</a>
+            <a href="admin.html" class="active">纪要管理</a>
+            <a href="config.html" id="navConfig" style="display:none;">信息配置</a>
+            <span class="nav-user" id="navUserLabel" style="display:none;"></span>
+            <a href="#" id="navLogout" onclick="logout()">退出登录</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="admin-header">
+            <h1>纪要管理后台</h1>
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalCompanyCount">0</div>
+                    <div class="stat-label">总计客户数</div>
+                </div>
+                <div class="stat-card" onclick="showSharedCompanyDetail()" style="cursor:pointer;">
+                    <div class="stat-number" id="sharedCompanyCount">0</div>
+                    <div class="stat-label">已分享客户</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="sharedCompanyRatio">0%</div>
+                    <div class="stat-label">已分享客户占比</div>
+                </div>
+                <div class="stat-card urgent">
+                    <div class="stat-number" id="pendingCount">0</div>
+                    <div class="stat-label">待跟进中</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="filters-section">
+            <div class="filter-group">
+                <label>按公司筛选：</label>
+                <select id="filterCompany">
+                    <option value="all">全部公司</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>按材料名称：</label>
+                <select id="filterMaterial">
+                    <option value="all">全部材料</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>按页码：</label>
+                <input type="text" id="filterPage" placeholder="如：P5">
+            </div>
+            <div class="filter-group search-group">
+                <input type="text" id="searchInput" placeholder="搜索公司、内容、人员...">
+                <button id="searchBtn">搜索</button>
+            </div>
+        </div>
+
+        <div class="feedback-list">
+            <h3>纪要列表</h3>
+            <div id="feedbackTable">
+                <div class="table-header">
+                    <div class="th">分享日期</div>
+                    <div class="th">公司</div>
+                    <div class="th">分享材料</div>
+                    <div class="th">分享对象</div>
+                    <div class="th">录入人</div>
+                    <div class="th">问答数</div>
+                    <div class="th">待跟进</div>
+                    <div class="th">操作</div>
+                </div>
+                <div id="feedbackRows"></div>
+            </div>
+            <div id="emptyState" class="empty-state">
+                <p>暂无纪要数据</p>
+            </div>
+        </div>
+
+        <div class="summary-section">
+            <h3>待跟进事项汇总</h3>
+            <div class="summary-actions">
+                <button class="btn-submit" onclick="exportFollowUpExcel()">导出 Excel</button>
+            </div>
+            <div class="summary-table" id="followUpSummary">
+                <div class="table-header">
+                    <div class="th">序号</div>
+                    <div class="th">材料名称</div>
+                    <div class="th">材料页码</div>
+                    <div class="th">提问公司</div>
+                    <div class="th">KP负责人</div>
+                    <div class="th">待跟进事项</div>
+                    <div class="th">目前进度</div>
+                    <div class="th">跟进状态</div>
+                </div>
+                <div id="followUpRows"></div>
+            </div>
+        </div>
+
+        <div class="summary-section">
+            <h3>客户信息汇总</h3>
+            <div class="summary-actions">
+                <button class="btn-submit" onclick="exportClientInfoExcel()">导出 Excel</button>
+            </div>
+            <div class="summary-table" id="clientInfoSummary">
+                <div class="table-header">
+                    <div class="th">序号</div>
+                    <div class="th">材料名称</div>
+                    <div class="th">材料页码</div>
+                    <div class="th">提问公司</div>
+                    <div class="th">KP负责人</div>
+                    <div class="th">KP问题</div>
+                    <div class="th">客户回复</div>
+                    <div class="th">客户问题</div>
+                    <div class="th">KP回复</div>
+                </div>
+                <div id="clientInfoRows"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="detailModal" class="modal">
+        <div class="modal-content detail-content">
+            <span class="close-btn" onclick="closeDetailModal()">&times;</span>
+            <h2>纪要详情</h2>
+            <div id="detailContent"></div>
+        </div>
+    </div>
+
+    <div id="companyDetailModal" class="modal">
+        <div class="modal-content detail-content">
+            <span class="close-btn" onclick="closeCompanyDetailModal()">&times;</span>
+            <h2>已分享客户明细</h2>
+            <div id="companyDetailContent"></div>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content detail-content">
+            <span class="close-btn" onclick="closeEditModal()">&times;</span>
+            <h2>编辑纪要</h2>
+            <div id="editContent"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+    <script src="supabase-client.js"></script>
+    <script src="api.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
