@@ -2,6 +2,20 @@
 // 依赖：supabase-client.js, api.js, config.js, auth.js
 (function() {
   
+    // 公司颜色映射
+    const companyColors = {
+        'xx集团': '#4A90D9',
+        'XX公司': '#50E878',
+        '内部': '#FF6B6B',
+        '太平': '#4ECDC4',
+        '太保集团': '#FFD166',
+        '友邦人寿': '#EF476F',
+        '长生': '#118AB2',
+        'Cigna': '#073B4C',
+        '安联': '#7209B7',
+        '阳光': '#F77F00'
+    };
+
     // 缓存记录和配置，避免频繁请求
     let _cachedRecords = null;
     let _cachedAllRecords = null;
@@ -10,20 +24,7 @@
     // 获取配置（异步，带缓存）
     async function getConfig() {
         if (_cachedConfig) return _cachedConfig;
-        _cachedConfig = await apiGetConfig(); function getDefaultConfig() {
-            return {
-                companies: ['xx集团', 'XX公司','内部'],  
-                materials: ['年报对标分析'],
-                speakers: ['客户问题','客户答复'],  
-                statuses: ['进行中', '已完成'],
-                defaults: {
-                    shareDateOffset: 0,
-                    kpLeader: '',
-                    followUpStatus: '进行中'
-                }
-            };
-        }
-
+        _cachedConfig = await apiGetConfig();
         return _cachedConfig;
     }
 
@@ -253,7 +254,7 @@
                             <div class="td">${escapeHtml(fu.page || '-')}</div>
                             <div class="td">${escapeHtml(r.company)}</div>
                             <div class="td">${escapeHtml(r.kpLeader || '-')}</div>
-                            <div class="td">${escapeHtml(fu.content)}</div>
+                            <div class="td">${escapeHtml(fu.content || '')}</div>
                             <div class="td">-</div>
                             <div class="td"><span class="cell-status ${fu.status === '进行中' ? 'status-pending' : 'status-resolved'}">${fu.status}</span></div>
                         </div>
@@ -307,7 +308,7 @@
                     index++;
                     data.push([
                         index, r.shareMaterial || '', fu.page || '', r.company,
-                        r.kpLeader || '', fu.content, '', fu.status
+                        r.kpLeader || '', fu.content || '', '', fu.status || ''
                     ]);
                 });
             }
@@ -392,7 +393,7 @@
                                 <span class="cell-status ${fu.status === '进行中' ? 'status-pending' : 'status-resolved'}">${fu.status}</span>
                             </div>
                             ${fu.page ? `<div class="detail-followup-progress"><strong>页码：</strong>${escapeHtml(fu.page)}</div>` : ''}
-                            <div class="detail-followup-content">${escapeHtml(fu.content).replace(/\n/g, '<br>')}</div>
+                            <div class="detail-followup-content">${escapeHtml(fu.content || '').replace(/\n/g, '<br>')}</div>
                         </div>
                     `).join('')}
                 </div>
