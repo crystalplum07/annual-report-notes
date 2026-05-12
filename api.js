@@ -296,12 +296,13 @@
         data.forEach(item => {
             configMap[item.key] = item.value;
         });
+        const defaults = getDefaultConfig();
         return {
-            companies: (configMap.companies || []).length > 0 ? configMap.companies : ['太平', '太保集团', '友邦人寿', '长生', 'Cigna', '安联', '阳光', '其他'],
-            materials: (configMap.materials || []).length > 0 ? configMap.materials : ['IFRS17切换分析', '行业对标报告', '敏感性分析'],
-            speakers: configMap.speakers || ['KP提问', '客户提问', 'KP描述', '客户描述', 'KP待跟进'],
-            statuses: (configMap.statuses || []).length > 0 ? configMap.statuses : ['进行中', '已完成'],
-            defaults: configMap.defaults || { shareDateOffset: 0, kpLeader: '', followUpStatus: '进行中' }
+            companies: (configMap.companies || []).length > 0 ? configMap.companies : defaults.companies,
+            materials: (configMap.materials || []).length > 0 ? configMap.materials : defaults.materials,
+            speakers: (configMap.speakers || []).length > 0 ? configMap.speakers : defaults.speakers,
+            statuses: (configMap.statuses || []).length > 0 ? configMap.statuses : defaults.statuses,
+            defaults: configMap.defaults || defaults.defaults
         };
     };
 
