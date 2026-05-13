@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用帮助 - 年报客户分享纪要</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .help-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .help-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .help-section h2 {
+            color: #1a1a2e;
+            border-bottom: 2px solid #4a90d9;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+        }
+        .help-section h3 {
+            color: #4a90d9;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .help-section p {
+            line-height: 1.8;
+            color: #444;
+        }
+        .help-steps {
+            background: #f8f9fa;
+            border-left: 4px solid #4a90d9;
+            padding: 12px 16px;
+            margin: 12px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .help-steps ol {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        .help-steps li {
+            margin: 8px 0;
+            line-height: 1.8;
+        }
+        .help-note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px 14px;
+            margin: 12px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 14px;
+        }
+        .help-tip {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 10px 14px;
+            margin: 12px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 14px;
+        }
+        .help-warn {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 10px 14px;
+            margin: 12px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 14px;
+        }
+        .role-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        .role-user-badge {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .role-admin-badge {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+        .help-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 14px;
+        }
+        .help-table th {
+            background: #4a90d9;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        .help-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .help-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        .toc {
+            background: #f0f4f8;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+        }
+        .toc h3 {
+            margin-top: 0;
+            color: #1a1a2e;
+        }
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .toc li {
+            padding: 4px 0;
+        }
+        .toc a {
+            color: #4a90d9;
+            text-decoration: none;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        .hidden-for-user {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="logo.png" alt="Logo" class="nav-logo">
+            年报客户分享纪要
+        </div>
+        <div class="nav-links">
+            <a href="index.html">录入纪要</a>
+            <a href="admin.html" id="navAdmin" style="display:none;">纪要管理</a>
+            <a href="config.html" id="navConfig" style="display:none;">信息配置</a>
+            <a href="help.html" class="active">使用帮助</a>
+            <span class="nav-user" id="navUserLabel" style="display:none;"></span>
+            <a href="#" id="navLogin" onclick="showLoginModal()">登录</a>
+            <a href="#" id="navLogout" onclick="logout()" style="display:none;">退出登录</a>
+        </div>
+    </nav>
+
+    <div class="container help-container">
+        <h1>📖 使用帮助</h1>
+        <p class="subtitle">了解如何使用年报客户分享纪要系统</p>
+
+        <div class="toc">
+            <h3>📋 目录</h3>
+            <ul>
+                <li>📌 <a href="#overview">系统简介</a></li>
+                <li>👤 <a href="#for-all">所有用户适用</a>
+                    <ul>
+                        <li><a href="#register-login">注册与登录</a></li>
+                        <li><a href="#enter-record">录入纪要</a></li>
+                        <li><a href="#view-edit-own">查看和编辑自己的纪要</a></li>
+                        <li><a href="#batch-upload">Excel 批量录入</a></li>
+                    </ul>
+                </li>
+                <li>🔑 <a href="#for-admin">管理员专属</a>
+                    <ul>
+                        <li><a href="#admin-records">纪要管理</a></li>
+                        <li><a href="#admin-users">用户管理</a></li>
+                        <li><a href="#admin-config">信息配置</a></li>
+                        <li><a href="#admin-export">数据导出</a></li>
+                    </ul>
+                </li>
+                <li>❓ <a href="#faq">常见问题</a></li>
+            </ul>
+        </div>
+
+        <!-- 系统简介 -->
+        <div class="help-section" id="overview">
+            <h2>📌 系统简介</h2>
+            <p>本系统用于记录和管理年报客户分享会议的纪要，包括客户问答、待跟进事项等信息。</p>
+            <p>系统支持以下核心功能：</p>
+            <ul>
+                <li>📝 录入客户分享会议纪要</li>
+                <li>👥 管理用户账号和权限</li>
+                <li>⚙️ 自定义配置公司、材料、提问方等字段</li>
+                <li>📊 查看待跟进事项汇总</li>
+                <li>📥 Excel 批量录入和导出</li>
+            </ul>
+            <div class="help-note">
+                <strong>⚠️ 注意：</strong>本系统部署在公开网络上，但只有登录用户才能录入和查看数据。请确保不要录入敏感信息。
+            </div>
+        </div>
+
+        <!-- 所有用户适用 -->
+        <div class="help-section" id="for-all">
+            <h2>👤 所有用户适用</h2>
+
+            <h3 id="register-login">1. 注册与登录</h3>
+            <div class="help-steps">
+                <strong>注册新账号：</strong>
+                <ol>
+                    <li>在任意页面点击右上角 <strong>"登录"</strong></li>
+                    <li>在登录框中点击 <strong>"立即注册"</strong></li>
+                    <li>输入用户名（2-20个字符）和密码（至少6位）</li>
+                    <li>点击 <strong>"注册"</strong>，注册成功后会自动登录</li>
+                </ol>
+            </div>
+            <div class="help-steps">
+                <strong>登录：</strong>
+                <ol>
+                    <li>点击右上角 <strong>"登录"</strong></li>
+                    <li>输入用户名和密码</li>
+                    <li>点击 <strong>"登录"</strong></li>
+                </ol>
+            </div>
+            <div class="help-tip">
+                <strong>💡 提示：</strong>注册时系统会自动生成一个内部邮箱地址，无需验证，注册后即可使用。
+            </div>
+
+            <h3 id="enter-record">2. 录入纪要</h3>
+            <div class="help-steps">
+                <strong>操作步骤：</strong>
+                <ol>
+                    <li>登录后，点击顶部导航的 <strong>"录入纪要"</strong></li>
+                    <li>填写基本信息：
+                        <ul>
+                            <li><strong>公司名称</strong>：从下拉框选择，或输入新公司名称</li>
+                            <li><strong>分享日期</strong>：点击输入框选择日期</li>
+                            <li><strong>分享材料</strong>：从下拉框选择材料类型</li>
+                            <li><strong>分享对象</strong>：输入参会客户人员，如"xx人寿CFO、总精，及精算部员工"</li>
+                            <li><strong>KP 负责人</strong>：输入负责本次分享的 KP 员工姓名</li>
+                        </ul>
+                    </li>
+                    <li>填写客户问答（可添加多个）：
+                        <ul>
+                            <li>点击 <strong>"+ 添加问答"</strong> 添加更多问答块</li>
+                            <li>每个问答块包含：材料页码、KP问题、客户回复、客户问题、KP回复</li>
+                            <li>点击问答块右上角的 <strong>"删除"</strong> 可删除该问答</li>
+                        </ul>
+                    </li>
+                    <li>填写 KP 待跟进事项（可添加多个）：
+                        <ul>
+                            <li>点击 <strong>"+ 添加待跟进"</strong> 添加更多待跟进事项</li>
+                            <li>每个待跟进事项包含：材料页码、待跟进内容、跟进状态</li>
+                            <li>跟进状态可选择"进行中"或"已完成"</li>
+                        </ul>
+                    </li>
+                    <li>点击 <strong>"保存纪要"</strong> 提交</li>
+                    <li>保存成功后会出现确认弹窗，点击"确定"可继续录入下一条</li>
+                </ol>
+            </div>
+            <div class="help-note">
+                <strong>📝 注意：</strong>带 <span style="color:red;">*</span> 的为必填项，必须填写才能保存。
+            </div>
+
+            <h3 id="view-edit-own">3. 查看和编辑自己的纪要</h3>
+            <div class="help-steps">
+                <strong>管理员用户：</strong>
+                <ol>
+                    <li>点击顶部导航的 <strong>"纪要管理"</strong></li>
+                    <li>在纪要列表中找到自己的记录（可通过筛选条件快速查找）</li>
+                    <li>点击操作列的 <strong>"查看"</strong> 查看详情</li>
+                    <li>点击 <strong>"编辑"</strong> 修改纪要内容</li>
+                    <li>点击 <strong>"删除"</strong> 删除纪要（不可恢复）</li>
+                </ol>
+                <strong>普通用户：</strong>
+                <ol>
+                    <li>目前普通用户需要通过管理员帮助才能查看和编辑自己的纪要</li>
+                    <li>管理员正在开发普通用户的"我的纪要"页面</li>
+                </ol>
+            </div>
+
+            <h3 id="batch-upload">4. Excel 批量录入</h3>
+            <div class="help-steps">
+                <strong>操作步骤：</strong>
+                <ol>
+                    <li>在"录入纪要"页面，滚动到最下方的 <strong>"Excel 批量录入"</strong> 区域</li>
+                    <li>点击 <strong>"下载 Excel 模板"</strong> 下载标准模板文件</li>
+                    <li>按模板格式填写数据（注意：不要修改表头行）</li>
+                    <li>填写完成后，点击 <strong>"上传 Excel 批量录入"</strong></li>
+                    <li>选择填写好的 Excel 文件</li>
+                    <li>系统会自动解析并批量录入，完成后提示录入成功条数</li>
+                </ol>
+            </div>
+            <div class="help-note">
+                <strong>📝 模板格式说明：</strong>
+                <table class="help-table">
+                    <tr>
+                        <th>列名</th>
+                        <th>说明</th>
+                        <th>是否必填</th>
+                    </tr>
+                    <tr>
+                        <td>公司名称</td>
+                        <td>客户公司名称</td>
+                        <td>必填</td>
+                    </tr>
+                    <tr>
+                        <td>分享日期</td>
+                        <td>格式：YYYY/MM/DD</td>
+                        <td>必填</td>
+                    </tr>
+                    <tr>
+                        <td>分享材料</td>
+                        <td>材料类型名称</td>
+                        <td>必填</td>
+                    </tr>
+                    <tr>
+                        <td>分享对象</td>
+                        <td>参会客户人员</td>
+                        <td>必填</td>
+                    </tr>
+                    <tr>
+                        <td>KP负责人</td>
+                        <td>KP 负责人姓名</td>
+                        <td>选填</td>
+                    </tr>
+                    <tr>
+                        <td>材料页码</td>
+                        <td>问答相关的材料页码</td>
+                        <td>选填</td>
+                    </tr>
+                    <tr>
+                        <td>KP问题</td>
+                        <td>KP 提出的问题</td>
+                        <td>选填</td>
+                    </tr>
+                    <tr>
+                        <td>客户回复</td>
+                        <td>客户的回复内容</td>
+                        <td>选填</td>
+                    </tr>
+                    <tr>
+                        <td>客户问题</td>
+                        <td>客户提出的问题</td>
+                        <td>选填</td>
+                    </tr>
+                    <tr>
+                        <td>KP回复</td>
+                        <td>KP 的回复内容</td>
+                        <td>选填</td>
+                    </tr>
+                    <tr>
+                        <td>待跟进事项</td>
+                        <td>待跟进的内容</td>
+                        <td>选填</td>
+                    </tr>
+                    <tr>
+                        <td>跟进状态</td>
+                        <td>进行中 / 已完成</td>
+                        <td>选填</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="help-warn">
+                <strong>⚠️ 注意：</strong>批量录入时，如果公司名称、分享材料等在配置中不存在，系统会自动添加到配置中。
+            </div>
+        </div>
+
+        <!-- 管理员专属 -->
+        <div class="help-section" id="for-admin">
+            <h2>🔑 管理员专属功能</h2>
+            <div class="help-note">
+                <span class="role-badge role-admin-badge">管理员</span>
+                以下功能仅管理员账号可见和可操作。
+            </div>
+
+            <h3 id="admin-records">1. 纪要管理</h3>
+            <div class="help-steps">
+                <strong>查看纪要列表：</strong>
+                <ol>
+                    <li>点击顶部导航的 <strong>"纪要管理"</strong></li>
+                    <li>页面显示所有用户录入的纪要列表</li>
+                    <li>可查看统计卡片：总计客户数、已分享客户数、已分享占比、待跟进中数量</li>
+                </ol>
+                <strong>筛选纪要：</strong>
+                <ol>
+                    <li>按公司筛选：选择下拉框中的公司名称</li>
+                    <li>按材料名称筛选：选择下拉框中的材料类型</li>
+                    <li>按页码筛选：输入材料页码（如：P5）</li>
+                    <li>搜索：输入关键词（公司、内容、人员等）</li>
+                    <li>点击 <strong>"搜索"</strong> 或按回车执行筛选</li>
+                </ol>
+                <strong>查看纪要详情：</strong>
+                <ol>
+                    <li>点击某条纪要操作列的 <strong>"查看"</strong></li>
+                    <li>弹窗显示完整的纪要信息，包括基本信息和所有问答、待跟进事项</li>
+                    <li>点击弹窗右上角的 <strong>"×"</strong> 关闭</li>
+                </ol>
+                <strong>编辑纪要：</strong>
+                <ol>
+                    <li>点击某条纪要操作列的 <strong>"编辑"</strong></li>
+                    <li>页面显示编辑表单，可修改所有字段</li>
+                    <li>修改完成后点击 <strong>"保存修改"</strong></li>
+                    <li>点击 <strong>"取消"</strong> 放弃修改</li>
+                </ol>
+                <strong>删除纪要：</strong>
+                <ol>
+                    <li>点击某条纪要操作列的 <strong>"删除"</strong></li>
+                    <li>系统会要求确认，点击 <strong>"确定"</strong> 永久删除</li>
+                    <li><span style="color:red;">删除后无法恢复，请谨慎操作！</span></li>
+                </ol>
+            </div>
+
+            <h3 id="admin-users">2. 用户管理</h3>
+            <div class="help-steps">
+                <strong>访问用户管理：</strong>
+                <ol>
+                    <li>点击顶部导航的 <strong>"信息配置"</strong>（用户管理在页面下方）</li>
+                    <li>页面显示用户统计：总用户数、管理员数、普通用户数</li>
+                    <li>下方显示所有用户的列表</li>
+                </ol>
+                <strong>修改用户角色：</strong>
+                <ol>
+                    <li>找到目标用户，点击操作列的 <strong>"改角色"</strong></li>
+                    <li>选择新角色（普通用户 / 管理员）</li>
+                    <li>点击 <strong>"确认修改"</strong></li>
+                    <li><span style="color:red;">不能修改自己的角色</span></li>
+                </ol>
+                <strong>重置用户密码：</strong>
+                <ol>
+                    <li>找到目标用户，点击操作列的 <strong>"重置密码"</strong></li>
+                    <li>输入新密码（至少4位）</li>
+                    <li>再次输入确认新密码</li>
+                    <li>点击 <strong>"确认重置"</strong></li>
+                </ol>
+                <strong>删除用户：</strong>
+                <ol>
+                    <li>找到目标用户，点击操作列的 <strong>"删除"</strong></li>
+                    <li>系统会要求确认，点击 <strong>"确定"</strong> 删除</li>
+                    <li><span style="color:red;">删除用户会同时删除该用户的所有纪要，且无法恢复！</span></li>
+                    <li><span style="color:red;">不能删除自己的账号</span></li>
+                </ol>
+            </div>
+
+            <h3 id="admin-config">3. 信息配置</h3>
+            <div class="help-steps">
+                <strong>访问信息配置：</strong>
+                <ol>
+                    <li>点击顶部导航的 <strong>"信息配置"</strong></li>
+                    <li>页面显示所有可配置项</li>
+                </ol>
+                <strong>配置公司名称：</strong>
+                <ol>
+                    <li>在"公司名称配置"文本框中，每行输入一个公司名称</li>
+                    <li>这些公司会出现在"录入纪要"页面的"公司名称"下拉框中</li>
+                </ol>
+                <strong>配置分享材料：</strong>
+                <ol>
+                    <li>在"分享材料配置"文本框中，每行输入一个材料类型</li>
+                    <li>这些材料类型会出现在"录入纪要"页面的"分享材料"下拉框中</li>
+                </ol>
+                <strong>配置提问方：</strong>
+                <ol>
+                    <li>在"提问方配置"文本框中，每行输入一个提问方标签</li>
+                    <li>这些标签会用于录入页面的问答区块标签</li>
+                </ol>
+                <strong>配置跟进状态：</strong>
+                <ol>
+                    <li>在"跟进状态配置"文本框中，每行输入一个状态</li>
+                    <li>这些状态会出现在"待跟进"的"跟进状态"下拉框中</li>
+                </ol>
+                <strong>配置录入默认值：</strong>
+                <ol>
+                    <li><strong>分享日期默认偏移</strong>：0 = 今天，-1 = 昨天，1 = 明天</li>
+                    <li><strong>KP负责人默认值</strong>：每次录入时自动填充的负责人姓名</li>
+                    <li><strong>跟进状态默认值</strong>：每次添加待跟进时的默认状态</li>
+                </ol>
+                <strong>保存配置：</strong>
+                <ol>
+                    <li>完成所有配置后，点击页面底部的 <strong>"保存配置"</strong></li>
+                    <li>系统提示"保存成功"后，新配置将在下次加载页面时生效</li>
+                    <li>如需恢复默认配置，点击 <strong>"恢复默认"</strong></li>
+                </ol>
+            </div>
+
+            <h3 id="admin-export">4. 数据导出</h3>
+            <div class="help-steps">
+                <strong>导出待跟进事项：</strong>
+                <ol>
+                    <li>在"纪要管理"页面，滚动到"待跟进事项汇总"区域</li>
+                    <li>点击 <strong>"导出 Excel"</strong></li>
+                    <li>系统生成 Excel 文件并自动下载</li>
+                    <li>Excel 包含：序号、材料名称、材料页码、提问公司、KP负责人、待跟进事项、目前进度、跟进状态</li>
+                </ol>
+                <strong>导出客户信息：</strong>
+                <ol>
+                    <li>在"纪要管理"页面，滚动到"客户信息汇总"区域</li>
+                    <li>点击 <strong>"导出 Excel"</strong></li>
+                    <li>系统生成 Excel 文件并自动下载</li>
+                    <li>Excel 包含：序号、材料名称、材料页码、提问公司、KP负责人、KP问题、客户回复、客户问题、KP回复</li>
+                </ol>
+            </div>
+            <div class="help-tip">
+                <strong>💡 提示：</strong>导出的 Excel 文件格式可以直接打印或转发给团队成员。
+            </div>
+        </div>
+
+        <!-- 常见问题 -->
+        <div class="help-section" id="faq">
+            <h2>❓ 常见问题</h2>
+
+            <h3>Q1：忘记密码怎么办？</h3>
+            <p>请联系系统管理员，管理员可以在"信息配置"页面的"用户管理"区域为您重置密码。</p>
+
+            <h3>Q2：为什么我无法看到"纪要管理"和"信息配置"菜单？</h3>
+            <p>这两个菜单只有管理员账号才能看到。如果您需要管理员权限，请联系系统管理员为您提升权限。</p>
+
+            <h3>Q3：录入纪要时，下拉框中没有我想要的公司/材料怎么办？</h3>
+            <p>您可以直接在输入框中输入新的公司名称或材料名称，系统会自动保存并在下次显示在下拉框中（需要管理员在"信息配置"中保存配置后才会正式生效）。</p>
+
+            <h3>Q4：批量上传 Excel 时提示错误怎么办？</h3>
+            <p>请检查：1) 是否使用了最新的模板；2) 必填列是否已填写；3) 日期格式是否为 YYYY/MM/DD；4) 文件是否为 .xlsx 或 .xls 格式。</p>
+
+            <h3>Q5：删除的纪要可以恢复吗？</h3>
+            <p>不可以。删除纪要是永久性的，无法恢复。请在删除前仔细确认。</p>
+
+            <h3>Q6：为什么我注册时提示"email rate limit exceeded"？</h3>
+            <p>这是因为 Supabase 邮件发送频率限制。您可以：1) 等待几分钟后重试；2) 联系管理员在 Supabase Dashboard 手动创建账号。</p>
+
+            <h3>Q7：系统数据存储在哪里？安全吗？</h3>
+            <p>所有数据存储在任何云 Supabase 数据库中。虽然网站部署在公开网络上，但只有登录用户才能访问数据。请不要在纪要中录入高度敏感的信息。</p>
+        </div>
+
+        <div class="help-section" style="text-align: center; padding: 20px;">
+            <p style="color: #999; font-size: 14px;">
+                📞 如需更多帮助，请联系系统管理员<br>
+                最后更新：2026年5月
+            </p>
+        </div>
+    </div>
+
+    <!-- 登录模态框 -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content login-content">
+            <h2>用户登录</h2>
+            <p class="login-hint">请输入用户名和密码</p>
+            <input type="text" id="loginUsername" placeholder="用户名" onkeypress="if(event.key==='Enter')document.getElementById('loginPassword').focus()">
+            <input type="password" id="loginPassword" placeholder="密码" onkeypress="if(event.key==='Enter')doLogin()">
+            <div class="login-error" id="loginError"></div>
+            <button class="btn-submit" onclick="doLogin()">登录</button>
+            <button class="btn-reset" onclick="closeLoginModal()">取消</button>
+            <p class="login-register-hint">还没有账号？<a href="#" onclick="showRegisterModal()">立即注册</a></p>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content login-content">
+            <h2>用户注册</h2>
+            <p class="login-hint">创建新账号</p>
+            <input type="text" id="regUsername" placeholder="用户名" onkeypress="if(event.key==='Enter')document.getElementById('regPassword').focus()">
+            <input type="password" id="regPassword" placeholder="密码" onkeypress="if(event.key==='Enter')document.getElementById('regConfirm').focus()">
+            <input type="password" id="regConfirm" placeholder="确认密码" onkeypress="if(event.key==='Enter')doRegister()">
+            <div class="login-error" id="registerError"></div>
+            <button class="btn-submit" onclick="doRegister()">注册</button>
+            <button class="btn-reset" onclick="closeRegisterModal()">取消</button>
+            <p class="login-register-hint">已有账号？<a href="#" onclick="showLoginModal()">立即登录</a></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+    <script src="supabase-client.js"></script>
+    <script src="api.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // 等待 auth.js 初始化完成
+            if (typeof authReady !== 'undefined') await authReady;
+            
+            // 根据登录状态显示/隐藏导航项
+            if (typeof updateNavForAuth === 'function') {
+                updateNavForAuth();
+            }
+            
+            // 根据角色显示/隐藏管理员内容
+            const isAdminUser = typeof isAdmin === 'function' && isAdmin();
+            const adminElements = document.querySelectorAll('.hidden-for-user');
+            adminElements.forEach(el => {
+                if (!isAdminUser) {
+                    el.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
