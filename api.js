@@ -6,10 +6,10 @@
     // ===== 认证相关 =====
 
     // 注册（username 作为 email 的一部分）
-    // 邮箱格式: username@mail.kpmg-share.app
+    // 邮箱格式: username@kpmgapp.com
     // 注意：需要在 Supabase Dashboard 关闭 "Confirm email" 选项
     window.apiRegister = async function(username, password) {
-        const email = username + '@mail.kpmg-share.app';
+        const email = username + '@kpmgapp.com';
         const { data, error } = await supabase.auth.signUp({
             email: email,
             password: password,
@@ -31,7 +31,7 @@
 
     // 登录
     window.apiLogin = async function(username, password) {
-        const email = username + '@mail.kpmg-share.app';
+        const email = username + '@kpmgapp.com';
         const { data, error } = await supabase.auth.signInWithPassword({
             email: email,
             password: password
@@ -63,7 +63,7 @@
             .eq('id', user.id)
             .single();
 
-        // 从 email 中提取用户名（格式: username@mail.kpmg-share.app）
+        // 从 email 中提取用户名（格式: username@kpmgapp.com）
         const baseUsername = user.email ? user.email.split('@')[0] : 'unknown';
         // profile.username 可能是完整邮箱（触发器默认值），需要提取用户名部分
         const profileUsername = profile ? (profile.username || '').split('@')[0] : baseUsername;
