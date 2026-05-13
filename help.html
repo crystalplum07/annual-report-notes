@@ -262,19 +262,17 @@
 
             <h3 id="view-edit-own">3. 查看和编辑自己的纪要</h3>
             <div class="help-steps">
-                <strong>管理员用户：</strong>
+                <strong>所有用户（包括普通用户和管理员）：</strong>
                 <ol>
-                    <li>点击顶部导航的 <strong>"纪要管理"</strong></li>
-                    <li>在纪要列表中找到自己的记录（可通过筛选条件快速查找）</li>
+                    <li>登录后，点击顶部导航的 <strong>"纪要管理"</strong></li>
+                    <li>在纪要列表中，您只能看到自己录入的纪要</li>
                     <li>点击操作列的 <strong>"查看"</strong> 查看详情</li>
                     <li>点击 <strong>"编辑"</strong> 修改纪要内容</li>
                     <li>点击 <strong>"删除"</strong> 删除纪要（不可恢复）</li>
                 </ol>
-                <strong>普通用户：</strong>
-                <ol>
-                    <li>目前普通用户需要通过管理员帮助才能查看和编辑自己的纪要</li>
-                    <li>管理员正在开发普通用户的"我的纪要"页面</li>
-                </ol>
+                <div class="help-note">
+                    <strong>📝 注意：</strong>普通用户只能看到自己录入的纪要，无法查看其他用户录入的记录。管理员可以看到所有用户的纪要。
+                </div>
             </div>
 
             <h3 id="batch-upload">4. Excel 批量录入</h3>
@@ -521,12 +519,6 @@
 
             <h3>Q5：删除的纪要可以恢复吗？</h3>
             <p>不可以。删除纪要是永久性的，无法恢复。请在删除前仔细确认。</p>
-
-            <h3>Q6：为什么我注册时提示"email rate limit exceeded"？</h3>
-            <p>这是因为 Supabase 邮件发送频率限制。您可以：1) 等待几分钟后重试；2) 联系管理员在 Supabase Dashboard 手动创建账号。</p>
-
-            <h3>Q7：系统数据存储在哪里？安全吗？</h3>
-            <p>所有数据存储在任何云 Supabase 数据库中。虽然网站部署在公开网络上，但只有登录用户才能访问数据。请不要在纪要中录入高度敏感的信息。</p>
         </div>
 
         <div class="help-section" style="text-align: center; padding: 20px;">
